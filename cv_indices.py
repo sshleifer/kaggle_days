@@ -31,7 +31,8 @@ def shape_assert(a, b):
     assert a.shape[0] == b.shape[0], message
 
 
-def cross_val_predict_proba_df(m, X, y, test_X, binary=True, sample_weight=None, cv_path='tr_indices.pkl'):
+def cross_val_predict_proba_df(m, X, y, test_X, binary=True, sample_weight=None,
+                               cv_path='tr_indices.pkl'):
     shape_assert(X, y)
     predict_proba_fn = predict_proba_fn_binary if binary else predict_proba
     if binary:
@@ -42,7 +43,6 @@ def cross_val_predict_proba_df(m, X, y, test_X, binary=True, sample_weight=None,
 
     all_indices = X.index
     test_preds = []
-
     for tr_idx in pickle_load(cv_path):
         test_idx = all_indices.drop(tr_idx)
         if sample_weight is None:
