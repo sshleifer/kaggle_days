@@ -58,13 +58,13 @@ from fastai.tabular import *
 from fastai.callbacks import *
 def cross_val_predict_fastai(train, cat_names, cont_names, test_list, procs,allowed_features, dep_var='target', ):
     all_te_probas = []
-
     all_indices = train.index
-    val_preds = pd.Series({k: np.nan for k in X.index})
+    val_preds = pd.Series({k: np.nan for k in train.index})
+    _cat_names = list(set(cat_names).intersection(allowed_features))
+    _cont_names = list(set(cat_names).intersection(allowed_features))
     for i, tr_idx in tqdm_notebook(list(enumerate(pickle_load('tr_indices.pkl')))):
         val_idx = all_indices.drop(tr_idx)
-        _cat_names = set(cat_names).intersection(allowed_features)
-        _cont_names = set(cat_names).intersection(allowed_features)
+
         data = (TabularList.from_df(
             train, path='train.csv',
             cat_names=cat_names, cont_names=_cont_names, procs=procs)
