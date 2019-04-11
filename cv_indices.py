@@ -32,7 +32,7 @@ def shape_assert(a, b):
 
 
 def cross_val_predict_proba_df(m, X, y, test_X, binary=True, sample_weight=None,
-                               cv_path='tr_indices.pkl'):
+                               cv_path='tr_indices.pkl', make_test_preds=False):
     shape_assert(X, y)
     predict_proba_fn = predict_proba_fn_binary if binary else predict_proba
     if binary:
@@ -50,7 +50,8 @@ def cross_val_predict_proba_df(m, X, y, test_X, binary=True, sample_weight=None,
         else:
             m.fit(X.iloc[tr_idx, :], y.iloc[tr_idx], sample_weight=sample_weight.iloc[tr_idx])
         preds.iloc[test_idx] = predict_proba_fn(m, X.iloc[test_idx, :])
-        test_preds.append(predict_proba_fn(m, test_X))
+        if make_test_preds:
+            test_preds.append(predict_proba_fn(m, test_X))
     return preds, test_preds
 
 from fastai.tabular import *
